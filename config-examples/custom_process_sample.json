@@ -1,0 +1,34 @@
+{
+    "name": "sampleJob",
+    "source": [
+        {
+            "name": "hiveSource",
+            "inputs": [],
+            "type": "hive",
+            "options": {
+            	"sql": "select * from hive_user"
+            }
+        }
+    ],
+    "process": [
+        {
+            "name": "transform",
+            "inputs": ["hiveSource"],
+            "type": "custom",
+            "options": {
+                "class": "com.easternallstars.star.spark.examples.CustomProcess"
+            }
+        }
+    ],
+    "sink": [
+        {
+            "name": "hdfs_sink",
+            "inputs": ["transform"],
+            "type": "hdfs",
+            "options": {
+                "path": "/data/test",
+                "format": "parquet"
+            }
+        }
+    ]
+}

@@ -1,0 +1,49 @@
+{
+    "name": "hbaseJob",
+    "source": [
+        {
+            "name": "hbaseSource1",
+            "inputs": [],
+            "type": "hbase",
+            "options": {
+                "tableName": "test_table",
+                "rowkey":"id1:string",
+                "cols": "info:content:string,info:title:string"
+            }
+        },
+        {
+            "name": "hbaseSource2",
+            "inputs": [],
+            "type": "hbase",
+            "options": {
+                "tableName": "label:ud0001",
+                "rowkey":"id2:string",
+                "cols": "c:c:string,c:t:string"
+            }
+        }
+    ],
+    "process": [
+        {
+            "name": "sqlProcess",
+            "inputs": ["hbaseSource"],
+            "type": "sql",
+            "options": {
+                "sql": "select hbaseSource1.id1, hbaseSource1.content, hbaseSource1.title from hbaseSource1, hbaseSource2 WHERE hbaseSource1.id1 = hbaseSource2.id2"
+            }
+        }
+    ],
+    "sink": [
+        {
+            "name": "hbaseSink",
+            "inputs": ["sqlProcess"],
+            "type": "hbase",
+            "options": {
+                "tableName": "label:ud0001",
+                "rowkey_format": "name:type:index",
+                "cols_format": "colFamily:name:type:index,colFamily:name:type:index",
+                "rowkey":"id:string:0",
+                "cols": "c:c:string:1,c:t:string:2"
+            }
+        }
+    ]
+}

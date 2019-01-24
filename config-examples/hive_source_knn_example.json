@@ -1,0 +1,40 @@
+{
+    "name": "sampleJob",
+    "source": [
+        {
+            "name": "hiveSource",
+            "inputs": [],
+            "type": "hive",
+            "options": {
+            	"sql": "SELECT company_id, comp_level, brand, is_member, is_recommend from neighbor_recommendation"
+            }
+        }
+    ],
+    "process": [
+        {
+            "name": "customProcess",
+            "inputs": ["hiveSource"],
+            "type": "custom",
+            "options": {
+                "class": "com.easternallstars.star.spark.ml.KNNProcess",
+                "idColIndex": "0",
+                "vectorColIndex": "1,2,3,4",
+                "topTreeSize": "5",
+                "leafSize": "5",
+                "maxDistance": "2",
+                "k": "5"
+            }
+        }
+    ],
+    "sink": [
+        {
+            "name": "hdfsSink",
+            "inputs": ["customProcess"],
+            "type": "hdfs",
+            "options": {
+                "path": "/data/test3",
+                "format": "textfile"
+            }
+        }
+    ]
+}

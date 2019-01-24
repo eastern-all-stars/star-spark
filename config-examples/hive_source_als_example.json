@@ -1,0 +1,37 @@
+{
+    "name": "sampleJob",
+    "source": [
+        {
+            "name": "hiveSource",
+            "inputs": [],
+            "type": "hive",
+            "options": {
+            	"sql": "SELECT * FROM implicit_rating"
+            }
+        }
+    ],
+    "process": [
+        {
+            "name": "customProcess",
+            "inputs": ["hiveSource"],
+            "type": "custom",
+            "options": {
+                "class": "com.easternallstars.star.spark.ml.ALSProcess",
+                "userCol": "user_id",
+                "itemCol": "company_id",
+                "ratingCol": "rating"
+            }
+        }
+    ],
+    "sink": [
+        {
+            "name": "hdfsSink",
+            "inputs": ["customProcess"],
+            "type": "hdfs",
+            "options": {
+                "path": "/data/test",
+                "format": "parquet"
+            }
+        }
+    ]
+}

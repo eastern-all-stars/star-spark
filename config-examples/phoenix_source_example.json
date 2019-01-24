@@ -1,0 +1,38 @@
+{
+    "name": "sampleJob",
+    "source": [
+        {
+            "name": "phoenixSource",
+            "inputs": [],
+            "type": "phoenix",
+            "options": {
+            	"sql": "select * from BAR",
+            	"url": "jdbc:phoenix:172.18.203.137:2181",
+            	"user": "1",
+            	"password": "1",
+            	"driver": "org.apache.phoenix.jdbc.PhoenixDriver"
+            }
+        }
+    ],
+    "process": [
+        {
+            "name": "transform",
+            "inputs": ["phoenixSource"],
+            "type": "sql",
+            "options": {
+                "sql": "SELECT K FROM phoenixSource WHERE K = '1'"
+            }
+        }
+    ],
+    "sink": [
+        {
+            "name": "hdfs_sink",
+            "inputs": ["transform"],
+            "type": "hdfs",
+            "options": {
+                "path": "/phoenix_transform",
+                "format": "json"
+            }
+        }
+    ]
+}

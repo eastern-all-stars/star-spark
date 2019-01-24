@@ -1,0 +1,39 @@
+{
+    "name": "sampleJob",
+    "source": [
+        {
+            "name": "kafkaSource",
+            "inputs": [],
+            "type": "kafka",
+            "options": {
+            	"kafka.bootstrap.servers" : "slave4:9092,slave5:9092",
+                "subscribe": "first-topic",
+                "maxOffsetsPerTrigger": "10000",
+                "format": "json",
+                "schema": "{\"type\":\"struct\",\"fields\":[{\"name\":\"timestamp\",\"type\":\"long\",\"nullable\":false,\"metadata\":{}},{\"name\":\"operation\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"elem\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"from\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"to\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"label\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"service\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"props\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}}]}"
+            }
+        }
+    ],
+    "process": [
+        {
+            "name": "transform",
+            "inputs": ["kafkaSource"],
+            "type": "sql",
+            "options": {
+                "sql": "SELECT timestamp FROM kafkaSource"
+            }
+        }
+    ],
+    "sink": [
+        {
+            "name": "hdfs_sink",
+            "inputs": ["transform"],
+            "type": "hdfs",
+            "options": {
+                "path": "/data/test",
+                "format": "parquet",
+                "interval": "30000"
+            }
+        }
+    ]
+}

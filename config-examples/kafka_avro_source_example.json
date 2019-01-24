@@ -1,0 +1,41 @@
+{
+    "name": "sampleJob",
+    "source": [
+        {
+            "name": "kafkaSource",
+            "inputs": [],
+            "type": "kafka",
+            "options": {
+                "format": "avro",
+            	"kafka.bootstrap.servers" : "192.168.1.51:9092",
+                "subscribe": "flume_kafka_channel_topic",
+                "maxOffsetsPerTrigger": "10000",
+                "startingOffsets": "latest"
+            }
+        }
+    ],
+    "process": [
+        {
+            "name": "transform",
+            "inputs": ["kafkaSource"],
+            "type": "sql",
+            "options": {
+                "sql": "SELECT event_timestamp, level, logger, host, thread, body, appName, createTime, biActionValue, biActionType FROM kafkaSource where level='ERROR'"
+            }
+        }
+    ],
+    "sink": [
+        {
+            "name": "hdfs_sink",
+            "inputs": ["transform"],
+            "type": "hdfs",
+            "options": {
+                "path": "/data/test",
+                "format": "parquet",
+                "interval": "30000",
+                "outputMode": "append"
+            }
+        }
+    ]
+}
+

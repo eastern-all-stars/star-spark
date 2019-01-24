@@ -1,0 +1,33 @@
+{
+    "name": "JOB_NAME",
+    "source": [
+        {
+            "name": "TASK_NAME",
+            "inputs": [],
+            "type": "SOURCE_TYPE",
+            "options": {
+                "KEY" : "VALUE"
+            }
+        }
+    ],
+    "process": [
+        {
+            "name": "TASK_NAME",
+            "inputs": ["INPUT_TASK_NAME"],
+            "type": "PROCESS_TYPE",
+            "options": {
+                "KEY" : "VALUE"
+            }
+        }
+    ],
+    "sink": [
+        {
+            "name": "TASK_NAME",
+            "inputs": ["INPUT_TASK_NAME"],
+            "type": "SINK_TYPE",
+            "options": {
+                "KEY" : "VALUE"
+            }
+        }
+    ]
+}

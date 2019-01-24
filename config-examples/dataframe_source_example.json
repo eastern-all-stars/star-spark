@@ -1,0 +1,65 @@
+{
+    "name": "Profile1Scale3Member",
+    "source": [
+        {
+            "name": "hbaseSource1",
+            "inputs": [],
+            "type": "hbase",
+            "options": {
+                "tableName": "label:scale",
+                "rowkey":"id1:string",
+                "cols": "c:c:long,c:s:int"
+            }
+        },
+        {
+            "name": "hbaseSource2",
+            "inputs": [],
+            "type": "hbase",
+            "options": {
+                "tableName": "label:member",
+                "rowkey":"id2:long",
+                "cols": "c:t:long"
+            }
+        },
+        {
+            "name": "dataframesource",
+            "inputs": [],
+            "type": "dataframe",
+            "options": {
+                "data": "rowkey:ud0002:string,status:ok:string"
+            }
+        }
+    ],
+    "process": [
+        {
+            "name": "sqlProcess",
+            "inputs": ["hbaseSource1", "hbaseSource2"],
+            "type": "sql",
+            "options": {
+                "sql": "select hbaseSource1.c as c, unix_timestamp() as t from hbaseSource1 INNER JOIN hbaseSource2 ON hbaseSource1.c = hbaseSource2.id2 and hbaseSource1.s IN (3)"
+            }
+        }
+    ],
+    "sink": [
+        {
+            "name": "hbaseSink",
+            "inputs": ["sqlProcess"],
+            "type": "hbase",
+            "options": {
+                "tableName": "label:ud0002",
+                "rowkey":"id:long:0",
+                "cols": "c:t:long:1"
+            }
+        },
+        {
+            "name": "hbaseSinkStatus",
+            "inputs": ["dataframesource"],
+            "type": "hbase",
+            "options": {
+                "tableName": "label:ciStatus",
+                "rowkey":"id:string:0",
+                "cols": "c:s:string:1"
+            }
+        }
+    ]
+}

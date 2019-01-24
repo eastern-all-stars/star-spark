@@ -2,11 +2,11 @@
 
 This project is greatly inspired by [airstream of Airbnb](https://www.slideshare.net/databricks/building-data-product-based-on-apache-spark-at-airbnb-with-jingwei-lu-and-liyin-tang) and [S2Job](https://github.com/apache/incubator-s2graph/tree/master/s2jobs).
 
-You can define a Spark job without writing even one line of Java/Scala codes. What you only need to do is just to write a definition file(json format).
+You can define a Spark job without writing even one line of Java/Scala codes. What you only need to do is just to write a job description file(json format).
 
 ## QuickStart
 
-### Step 1. write a definition file.
+### Step 1. write a job description file.
 
 **Example**
 
@@ -59,7 +59,7 @@ spark-submit --class com.easternallstars.star.spark.job.JobLauncher --master yar
 
 Have a cup of coffee and wait util the job is over.
 
-You can also upload json and jar files to oozie, and let oozie schedule the spark job.
+You can also upload job description file and jar to hdfs, and let Oozie schedule the spark job.
 
 
 
